@@ -874,6 +874,7 @@ class Listener:
 
                 listener_dict = """
 {{
+    'name': '{name}',
     'delay' : {delay},
     'jitter' : {jitter},
     'fixed_parameters': {{
@@ -894,6 +895,7 @@ class Listener:
                     delay = delay,
                     jitter = jitter,
                     UA = profile.split('|')[1],
+                    name = listenerOptions['Name']['Value'],
                     cookie = self.options['Cookie']['Value'],
                     taskURIs = profile.split('|')[0],
                     lostLimit = lostLimit,
