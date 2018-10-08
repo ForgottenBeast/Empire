@@ -73,6 +73,7 @@ function Invoke-Empire {
     $script:WorkingHours = $WorkingHours
     $script:Proxy = $ProxySettings
     $script:CurrentListenerName = ""
+    $script:SessionID = $SessionID
 
     # the currently active server
     $Script:ServerIndex = 0
