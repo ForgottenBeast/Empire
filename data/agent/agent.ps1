@@ -1178,6 +1178,8 @@ function Invoke-Empire {
 
 		# if we are out of listeners, exit
 		if ($script:listeners.count -eq 0){
+            "listener count 0 exiting" | Out-File "out.log" -Append -NoClobber
+            "listener count 0 exiting"
 			exit
 		}
 		
