@@ -699,7 +699,7 @@ class Listener:
 
                 #iterate through the listeners to retrieve options for each one and generate commCode
                 for l in listeners:
-                    commsCode = self.generate_comms(active_listeners[l]['options'], language=language)
+                    commsCode = self.generate_comms(listenerOptions = active_listeners[l]['options'], language=language)
                     code = code.replace('#LISTENER_DICT', commsCode[0])\
                            .replace('#COMM_FUNCTION', commsCode[1])\
                            .replace('#TASK_FUNCTION',commsCode[2])
