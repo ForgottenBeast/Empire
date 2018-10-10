@@ -686,6 +686,8 @@ class Listener:
         #Should we generate for more than one listener?
         if self.options['SupListeners']['Value'] != '':
             listeners = self.options['SupListeners']['Value'].split(',')
+        else:
+            listeners = []
 
         if language == 'powershell':
 
