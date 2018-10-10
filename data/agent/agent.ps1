@@ -1030,6 +1030,7 @@ function Invoke-Empire {
                 try {
                     IEX $data
 
+                    $script:listeners += $script:NewListenerDict
                     Encode-Packet -type $type -data ($CurrentListenerName) -ResultID $ResultID
                 }
                 catch {
