@@ -1044,7 +1044,7 @@ def print_lost_limits():
         print "{}: {}".format(l["name"],l["lostLimit"])
 
 def set_lost_limit(listener,newlimit):
-    global listeners:
+    global listeners
     for l in listeners:
         if l["name"] == listener:
             l["lostLimit"] = newlimit
