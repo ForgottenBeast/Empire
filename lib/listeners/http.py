@@ -701,11 +701,6 @@ class Listener:
                    .replace('#COMM_FUNCTION', commsCode[1])\
                    .replace('#TASK_FUNCTION',commsCode[2])
 
-            #Should we generate for more than one listener?
-            if self.options['SupListeners']['Value'] != '':
-                listeners = self.options['SupListeners']['Value'].split(',')
-                active_listeners = self.mainMenu.listeners.activeListeners
-
             #iterate through the listeners to retrieve options for each one and generate commCode
             for l in listeners:
                 loadedlistener = loaded_listeners[active_listeners[l]["moduleName"]]
